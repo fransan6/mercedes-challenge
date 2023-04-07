@@ -25,6 +25,7 @@ gem "turbo-rails"
 gem "stimulus-rails"
 
 gem "font-awesome-sass", "~> 6.4.0"
+gem "sassc-rails"
 
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
