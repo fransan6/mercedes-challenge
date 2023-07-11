@@ -1,6 +1,9 @@
-<h1>Find museums worldwide</h1>
-<p><i class="fa-solid fa-landmark"></i> Enter your postal code below to find your nearest museums:</p>
+<h1>Find museums worldwide <i class="fa-solid fa-landmark"></i></h1>
+<p>Enter GPS details below to find your nearest museums</p>
 <%= form_with url: "/search", method: :get do |form| %>
-  <%= form.text_field :postcode %>
+  <%= form.label "Latitude:" %>
+  <%= form.text_field :latitude %>
+  <%= form.label "Longitude:" %>
+  <%= form.text_field :longitude %>
   <%= form.submit "Search" %>
 <% end %>
