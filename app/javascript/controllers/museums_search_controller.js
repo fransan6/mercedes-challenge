@@ -5,19 +5,11 @@ export default class extends Controller {
   static targets = [ "longitude", "latitude", "results" ];
   static values = { api: String };
 
-  async submit(event) {
+  submit(event) {
     if (this.longitudeTarget.value === '' | this.latitudeTarget.value === '') {
-      event.preventDefault();
-      this.resultsTarget.innerHTML = '';
-      let para = document.createElement("p")
-      para.textContent = "You're missing a coordinate, try again.."
-      this.resultsTarget.appendChild(para);
+      this.unsuccessful(event)
     } else {
-      event.preventDefault();
-      this.resultsTarget.innerHTML = '';
-      museumsObj = {};
-      await this.obtainMuseums(this.longitudeTarget.value, this.latitudeTarget.value);
-      this.displayMuseums();
+      this.successful(event)
     }
   }
 
@@ -46,5 +38,21 @@ export default class extends Controller {
 
     this.longitudeTarget.value = '';
     this.latitudeTarget.value = '';
+  }
+
+  unsuccessful(event) {
+    event.preventDefault();
+    this.resultsTarget.innerHTML = '';
+    let para = document.createElement("p")
+    para.textContent = "You're missing a coordinate, try again.."
+    this.resultsTarget.appendChild(para);
+  }
+
+  async successful(event) {
+    event.preventDefault();
+    this.resultsTarget.innerHTML = '';
+    museumsObj = {};
+    await this.obtainMuseums(this.longitudeTarget.value, this.latitudeTarget.value);
+    this.displayMuseums();
   }
 }
