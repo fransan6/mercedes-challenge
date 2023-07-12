@@ -6,12 +6,19 @@ export default class extends Controller {
   static values = { api: String };
 
   async submit(event) {
-    event.preventDefault();
-    this.resultsTarget.innerHTML = '';
-    museumsObj = {};
-
-    await this.obtainMuseums(this.longitudeTarget.value, this.latitudeTarget.value);
-    this.displayMuseums();
+    if (this.longitudeTarget.value === '' | this.latitudeTarget.value === '') {
+      event.preventDefault();
+      this.resultsTarget.innerHTML = '';
+      let para = document.createElement("p")
+      para.textContent = "You're missing a coordinate, try again.."
+      this.resultsTarget.appendChild(para);
+    } else {
+      event.preventDefault();
+      this.resultsTarget.innerHTML = '';
+      museumsObj = {};
+      await this.obtainMuseums(this.longitudeTarget.value, this.latitudeTarget.value);
+      this.displayMuseums();
+    }
   }
 
   async obtainMuseums(longitude, latitude) {
@@ -21,7 +28,7 @@ export default class extends Controller {
     for (const museum of data.features) {
       let postCode = museum.properties.context.postcode.name;
 
-      if (Object.keys(museumsObj).includes(postCode) === false ) {
+      if (Object.keys(museumsObj).includes(postCode) === false) {
         museumsObj[postCode] = [museum.properties.name];
       } else {
         museumsObj[postCode].push(museum.properties.name);
@@ -31,8 +38,8 @@ export default class extends Controller {
 
   displayMuseums() {
     for (const museum in museumsObj) {
-      let para = document.createElement("p")
-      let museumListing = `<b>${museum}</b> - ${museumsObj[museum]}`
+      let para = document.createElement("p");
+      let museumListing = `<b>${museum}</b> - ${museumsObj[museum]}`;
       para.innerHTML += museumListing.replaceAll(",", ", ");
       this.resultsTarget.appendChild(para);
     }
