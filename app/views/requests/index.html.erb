@@ -2,14 +2,16 @@
   <h1>Find museums in Germany <i class="fa-solid fa-landmark"></i></h1>
   <p>Enter GPS details below to find your 10 nearest museums</p>
   <%= form_with url: "/search", method: :get do |form| %>
-    <%= form.label "Latitude:" %>
+    <%= form.label :latitude, "Latitude:" %>
     <%= form.text_field :latitude, data: { museums_search_target: "latitude" } %>
-    <%= form.label "Longitude:" %>
+    <%= form.label :longitude, "Longitude:" %>
     <%= form.text_field :longitude, data: { museums_search_target: "longitude" } %>
-    <%= form.submit "Search", data: { action:"click->museums-search#submit", museums_search_target: "search" } %>
+    <%= form.submit "Find", data: { action: "click->museums-search#submit" } %>
   <% end %>
 
-  <div class="results">
+  <div data-museums-search-target="results">
 
   </div>
 </div>
+
+<!--
