@@ -14,18 +14,19 @@ export default class extends Controller {
     .then(response => response.json())
     .then(data => {
       for (const museum of data.features) {
-        if (!museumsObj.keys().includes(museum.properties.context.postcode.name)) {
-        museumsObj[museum.properties.context.postcode.name] = [museum.properties.name]
-      } else {
-        museumsObj[museum.properties.context.postcode.name].push(museum.properties.name)
+        if (Object.keys(museumsObj).includes(museum.properties.context.postcode.name) === false ) {
+          museumsObj[museum.properties.context.postcode.name] = [museum.properties.name];
+        } else {
+          museumsObj[museum.properties.context.postcode.name].push(museum.properties.name);
+        }
       }
-    }})
-    console.log(museumsObj)
+    })
+      console.log(museumsObj);
+    }
+
+    submit() {
+      console.log("This is submitted")
+    }
   }
 
-  submit() {
-    console.log("This is submitted")
-  }
-}
-
-const museumsObj = { first: "test" };
+  const museumsObj = {};
