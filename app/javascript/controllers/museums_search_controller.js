@@ -1,32 +1,29 @@
 import { Controller } from "@hotwired/stimulus"
+const museumsObj = {};
 
 export default class extends Controller {
-  static targets = [ "longitude", "latitude", "search" ];
-  static values = { api: String }
+  static targets = [ "longitude", "latitude", "results" ];
+  static values = { api: String };
 
-  connect() {
-    console.log("Controller connected");
-    this.obtainMuseums();
+  submit(event) {
+    event.preventDefault();
+    this.obtainMuseums(this.longitudeTarget.value, this.latitudeTarget.value);
+    console.log(museumsObj);
   }
 
-  obtainMuseums() {
-    fetch(`https://api.mapbox.com/search/searchbox/v1/category/museum?access_token=${this.apiValue}&limit=10&proximity=13.437641,52.494857`)
+  obtainMuseums(longitude, latitude) {
+    fetch(`https://api.mapbox.com/search/searchbox/v1/category/museum?access_token=${this.apiValue}&limit=10&proximity=${longitude},${latitude}`)
     .then(response => response.json())
     .then(data => {
       for (const museum of data.features) {
-        if (Object.keys(museumsObj).includes(museum.properties.context.postcode.name) === false ) {
-          museumsObj[museum.properties.context.postcode.name] = [museum.properties.name];
+        let postCode = museum.properties.context.postcode.name
+
+        if (Object.keys(museumsObj).includes(postCode) === false ) {
+          museumsObj[postCode] = [museum.properties.name];
         } else {
-          museumsObj[museum.properties.context.postcode.name].push(museum.properties.name);
+          museumsObj[postCode].push(museum.properties.name);
         }
       }
     })
-      console.log(museumsObj);
-    }
-
-    submit() {
-      console.log("This is submitted")
-    }
   }
-
-  const museumsObj = {};
+}
