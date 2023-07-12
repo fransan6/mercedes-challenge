@@ -1,11 +1,15 @@
 <div data-controller="museums-search" data-museums-search-api-value="<%= ENV.fetch('mapbox_api') %>">
-  <h1>Find museums worldwide <i class="fa-solid fa-landmark"></i></h1>
-  <p>Enter GPS details below to find your nearest museums</p>
+  <h1>Find museums in Germany <i class="fa-solid fa-landmark"></i></h1>
+  <p>Enter GPS details below to find your 10 nearest museums</p>
   <%= form_with url: "/search", method: :get do |form| %>
     <%= form.label "Latitude:" %>
     <%= form.text_field :latitude, data: { museums_search_target: "latitude" } %>
     <%= form.label "Longitude:" %>
     <%= form.text_field :longitude, data: { museums_search_target: "longitude" } %>
-    <%= form.submit "Search" %>
+    <%= form.submit "Search", data: { action:"click->museums-search#submit", museums_search_target: "search" } %>
   <% end %>
+
+  <div class="results">
+
+  </div>
 </div>
