@@ -10,9 +10,7 @@ export default class extends Controller {
     this.resultsTarget.innerHTML = '';
 
     if (isNaN(this.limitTarget.value) || parseInt(this.limitTarget.value) > 10) {
-      let para = document.createElement("p");
-      para.textContent = "Please enter a number from 1 to 10.";
-      this.resultsTarget.appendChild(para);
+      this.createParaElement("Please enter a number from 1 to 10.");
     } else {
       if (this.longitudeTarget.value === '' || this.latitudeTarget.value === '' || this.limitTarget.value === '') {
         this.unsuccessful(event);
@@ -41,9 +39,7 @@ export default class extends Controller {
       }
     } catch (error) {
       console.error(`Could not get museums: ${error}`);
-      let para = document.createElement("p");
-      para.textContent = "Apologies, there is an error in obtaining the museums.";
-      this.resultsTarget.appendChild(para);
+      this.createParaElement("Apologies, there is an error in obtaining the museums.");
     }
   }
 
@@ -61,14 +57,18 @@ export default class extends Controller {
   }
 
   unsuccessful() {
-    let para = document.createElement("p");
-    para.textContent = "You're missing something, try again..";
-    this.resultsTarget.appendChild(para);
+    this.createParaElement("You're missing something, try again..")
   }
 
   async successful() {
     museumsObj = {};
     await this.obtainMuseums(this.longitudeTarget.value, this.latitudeTarget.value, this.limitTarget.value);
     this.displayMuseums();
+  }
+
+  createParaElement(message) {
+    let para = document.createElement("p");
+    para.textContent = `${message}`;
+    this.resultsTarget.appendChild(para);
   }
 }
