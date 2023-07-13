@@ -2,6 +2,8 @@
   <h1>Find museums in Germany <i class="fa-solid fa-landmark"></i></h1>
   <p>Enter coordinates below to find your 10 nearest museums, grouped by postcode.</p>
     <%= form_with url: "/search", method: :get do |form| %>
+      <%= form.label :limit, "Number of museums (up to 10):" %>
+      <%= form.text_field :limit, data: { museums_search_target: "limit" } %>
       <%= form.label :latitude, "Latitude:" %>
       <%= form.text_field :latitude, data: { museums_search_target: "latitude" } %>
       <%= form.label :longitude, "Longitude:" %>

@@ -2,23 +2,29 @@ import { Controller } from "@hotwired/stimulus"
 let museumsObj = {};
 
 export default class extends Controller {
-  static targets = [ "longitude", "latitude", "results" ];
+  static targets = [ "longitude", "latitude", "results", "limit" ];
   static values = { api: String };
 
   submit(event) {
     event.preventDefault();
     this.resultsTarget.innerHTML = '';
 
-    if (this.longitudeTarget.value === '' | this.latitudeTarget.value === '') {
-      this.unsuccessful(event)
+    if (isNaN(this.limitTarget.value) || parseInt(this.limitTarget.value) > 10) {
+      let para = document.createElement("p");
+      para.textContent = "Please enter a number from 1 to 10.";
+      this.resultsTarget.appendChild(para);
     } else {
-      this.successful(event)
+      if (this.longitudeTarget.value === '' || this.latitudeTarget.value === '' || this.limitTarget.value === '') {
+        this.unsuccessful(event);
+      } else {
+        this.successful(event);
+      }
     }
   }
 
-  async obtainMuseums(longitude, latitude) {
+  async obtainMuseums(longitude, latitude, limit) {
     try {
-      const response = await fetch(`https://api.mapbox.com/search/searchbox/v1/category/museum?access_token=${this.apiValue}&limit=10&proximity=${longitude},${latitude}`);
+      const response = await fetch(`https://api.mapbox.com/search/searchbox/v1/category/museum?access_token=${this.apiValue}&limit=${limit}&proximity=${longitude},${latitude}`);
       if (!response.ok) {
         throw new Error(`HTTP error: ${response.status}`);
       }
@@ -36,7 +42,7 @@ export default class extends Controller {
     } catch (error) {
       console.error(`Could not get museums: ${error}`);
       let para = document.createElement("p");
-      para.textContent = "Apologies, there is an error in obtaining the museums."
+      para.textContent = "Apologies, there is an error in obtaining the museums.";
       this.resultsTarget.appendChild(para);
     }
   }
@@ -51,17 +57,18 @@ export default class extends Controller {
 
     this.longitudeTarget.value = '';
     this.latitudeTarget.value = '';
+    this.limitTarget.value = '';
   }
 
   unsuccessful() {
-    let para = document.createElement("p")
-    para.textContent = "You're missing a coordinate, try again.."
+    let para = document.createElement("p");
+    para.textContent = "You're missing something, try again..";
     this.resultsTarget.appendChild(para);
   }
 
   async successful() {
     museumsObj = {};
-    await this.obtainMuseums(this.longitudeTarget.value, this.latitudeTarget.value);
+    await this.obtainMuseums(this.longitudeTarget.value, this.latitudeTarget.value, this.limitTarget.value);
     this.displayMuseums();
   }
 }
