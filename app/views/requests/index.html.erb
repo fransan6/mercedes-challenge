@@ -8,7 +8,7 @@
       <%= form.text_field :latitude, data: { museums_search_target: "latitude" } %>
       <%= form.label :longitude, "Longitude:" %>
       <%= form.text_field :longitude, data: { museums_search_target: "longitude" } %>
-      <%= form.submit "Find", data: { action: "click->museums-search#submit" } %>
+      <%= form.submit "Find", data: { action: "click->museums-search#submit" }, class: "submit" %>
     <% end %>
   <div data-museums-search-target="results"></div>
 </div>
